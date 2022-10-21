@@ -22,25 +22,16 @@ public class Movie {
     private String name;
 
     @NotNull
-    @NotBlank
     @Size(max = 1000)
     private String desc;
 
     @NotNull
-    @NotEmpty
-    @NotBlank
     private Genre genre;
 
     @NotNull
-    @NotEmpty
-    @NotBlank
     private LocalDate relaseDate;
     @NotNull
-    @NotEmpty
-    @NotBlank
     private Double durationInMin;
-
-
     @Relationship
     private List<Actor> actors;
     @Relationship

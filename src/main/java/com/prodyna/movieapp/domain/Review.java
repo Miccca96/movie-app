@@ -10,14 +10,11 @@ public class Review {
 
     private Long id;
     @NotNull
-    @NotEmpty
-    @NotBlank
     @Min(1)
     @Max(5)
     private Integer rating;
     @NotNull
     @NotBlank
-    @Min(3)
     @Size(min = 3,max = 100)
     private String title;
 
