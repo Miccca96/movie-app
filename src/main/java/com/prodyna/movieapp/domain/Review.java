@@ -3,13 +3,25 @@ package com.prodyna.movieapp.domain;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class Review {
 
     private Long id;
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @Min(1)
+    @Max(5)
     private Integer rating;
+    @NotNull
+    @NotBlank
+    @Min(3)
+    @Size(min = 3,max = 100)
     private String title;
+
+    @Size(max = 1000)
     private String desc;
 
     @CreatedDate

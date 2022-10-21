@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,11 +17,27 @@ public class Movie {
 
     @Id @GeneratedValue
     private Long id;
+    @NotNull
+    @NotBlank
     private String name;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 1000)
     private String desc;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private Genre genre;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private LocalDate relaseDate;
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private Double durationInMin;
 
 
