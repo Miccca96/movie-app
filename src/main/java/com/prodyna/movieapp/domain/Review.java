@@ -1,13 +1,16 @@
 package com.prodyna.movieapp.domain;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class Review {
 
+    @Id @GeneratedValue
     private Long id;
     @NotNull
     @Min(1)
@@ -31,13 +34,10 @@ public class Review {
     public Review(){
     }
 
-    public Review(Long id, Integer rating, String title, String desc, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
+    public Review(Integer rating, String title, String desc) {
         this.rating = rating;
         this.title = title;
         this.desc = desc;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 
     public Long getId() {

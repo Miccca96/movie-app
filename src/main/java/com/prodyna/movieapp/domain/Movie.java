@@ -2,15 +2,19 @@ package com.prodyna.movieapp.domain;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import javax.validation.constraints.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Node
 public class Movie {
@@ -29,12 +33,17 @@ public class Movie {
     private Genre genre;
 
     @NotNull
-    private LocalDate relaseDate;
+    private LocalDate releaseDate;
     @NotNull
     private Double durationInMin;
-    @Relationship
+
+    @Transient
+    private Double averageRating;
+
+
+    @Relationship(type = "ACTS IN", direction = Relationship.Direction.INCOMING)
     private List<Actor> actors;
-    @Relationship
+    @Relationship(type = "HAS",direction = Relationship.Direction.OUTGOING)
     private List<Review> reviews;
 
     public Movie() {
@@ -45,21 +54,41 @@ public class Movie {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    public Movie(Long id, String name, String desc, Genre genre, LocalDate relaseDate, Double durationInMin, List<Actor> actors, List<Review> reviews, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
+
+
+    public void calculateAverageRating() {
+        double sum = 0;
+        int count = 0;
+        for (Review r:reviews
+             ) {
+            sum += r.getRating();
+            count++;
+        }
+        if(count == 0)
+            this.averageRating = Double.valueOf(0);
+        this.averageRating = Double.valueOf((double) sum/count);
+    }
+
+    public Movie(String name, String desc, Genre genre, LocalDate releaseDate, Double durationInMin, List<Actor> actors, List<Review> reviews) {
         this.name = name;
         this.desc = desc;
         this.genre = genre;
-        this.relaseDate = relaseDate;
+        this.releaseDate = releaseDate;
         this.durationInMin = durationInMin;
         this.actors = actors;
         this.reviews = reviews;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public Double getAverageRating() {
+        return averageRating;
     }
 
     public void setId(Long id) {
@@ -83,11 +112,11 @@ public class Movie {
     }
 
     public LocalDate getRelaseDate() {
-        return relaseDate;
+        return releaseDate;
     }
 
     public void setRelaseDate(LocalDate relaseDate) {
-        this.relaseDate = relaseDate;
+        this.releaseDate = relaseDate;
     }
 
     public Double getDurationInMin() {
@@ -128,8 +157,17 @@ public class Movie {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", desc='" + desc + '\'' +
-                ", relaseDate=" + relaseDate +
+                ", relaseDate=" + releaseDate +
                 ", durationInMin=" + durationInMin +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(name, movie.name);
+    }
+
 }

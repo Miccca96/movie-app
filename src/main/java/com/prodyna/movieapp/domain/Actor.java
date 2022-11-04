@@ -14,6 +14,7 @@ import javax.validation.constraints.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Node
@@ -41,15 +42,11 @@ public class Actor {
     }
 
 
-    public Actor(Long id, String firstName, String lastName, String biography, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
+    public Actor( String firstName, String lastName, String biography) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.biography = biography;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
-
 
     public Long getId() {
         return id;
@@ -91,4 +88,13 @@ public class Actor {
                 ", biography='" + biography + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Actor actor = (Actor) o;
+        return Objects.equals(id, actor.id) && Objects.equals(firstName, actor.firstName) && Objects.equals(lastName, actor.lastName) && Objects.equals(biography, actor.biography) && Objects.equals(createdDate, actor.createdDate) && Objects.equals(modifiedDate, actor.modifiedDate);
+    }
+
 }

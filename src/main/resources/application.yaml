@@ -2,5 +2,5 @@ spring:
   neo4j:
     authentication:
       username: neo4j
-      password: neo4j
+      password: admin
       uri: neo4j://localhost:7687
