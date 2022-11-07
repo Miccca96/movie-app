@@ -1,5 +1,8 @@
 package com.prodyna.movieapp.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -7,10 +10,16 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import org.springframework.data.neo4j.core.schema.Node;
 
+@Node
+@NoArgsConstructor
+@Getter
+@Setter
 public class Review {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     @NotNull
     @Min(1)
@@ -30,55 +39,11 @@ public class Review {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-
-    public Review(){
-    }
-
     public Review(Integer rating, String title, String desc) {
         this.rating = rating;
         this.title = title;
         this.desc = desc;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    @Override
-    public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", rating=" + rating +
-                ", title='" + title + '\'' +
-                ", desc='" + desc + '\'' +
-                '}';
-    }
 }

@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 public interface MovieRepository extends Neo4jRepository<Movie,Long> {
 
-    Movie findByName(String name);
+    Optional<Movie> findByName(String name);
 
     Optional<Movie> findByNameAndReleaseDate(String name, LocalDate releaseDate);
 

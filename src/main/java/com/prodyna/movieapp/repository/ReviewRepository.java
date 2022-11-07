@@ -12,7 +12,7 @@ public interface ReviewRepository extends Neo4jRepository<Review, Long> {
 
 
     @Query("match (m:Movie),(r:Review)\n" +
-            "where id(m) = 49\n" +
-            "return r")
+            "where id(m) = $id\n" +
+            "return collect(r)")
     List<Review> getReviewsForMovie(Long id);
 }

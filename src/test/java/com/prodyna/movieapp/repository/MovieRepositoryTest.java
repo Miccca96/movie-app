@@ -4,7 +4,10 @@ import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Genre;
 import com.prodyna.movieapp.domain.Movie;
 import com.prodyna.movieapp.domain.Review;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
@@ -32,9 +35,7 @@ class MovieRepositoryTest {
         movieRepository.deleteAll();
     }
 
-    @Test
-    void shouldPassIfNameExist() {
-
+    private Movie createMovieTest(){
         List<Actor> actors = new ArrayList<>();
         List<Review> reviews = new ArrayList<>();
         Actor actor = new Actor("Julia", "Roberts", "bio");
@@ -44,22 +45,28 @@ class MovieRepositoryTest {
         Review review = new Review(3, "Bad", "Very bad");
         reviews.add(review);
         Movie movie = new Movie("Kiss", "This is teenage movie", Genre.DRAMA, LocalDate.of(2023, 10, 23), Double.valueOf(56.3), actors, reviews);
+        return movie;
+    }
 
 
+    @Test
+    void shouldPassIfNameExist() {
+
+        Movie movie = createMovieTest();
         Movie createdMovie = movieRepository.save(movie);
 
-        Movie m = movieRepository.findByName(movie.getName());
+        Optional<Movie> m = movieRepository.findByName(movie.getName());
 
-
-        assertThat(m).isEqualTo(movie);
+        assertThat(m.get()).isEqualTo(movie);
 
 
     }
 
     @Test
-    void shouldReturnNullIfNameDoesntExist() {
+    void shouldThrowExcIfNameDoesntExist() {
 
-        assertNull(movieRepository.findByName("Dont existing name"));
+        Assertions.assertThrows(NoSuchElementException.class, () -> movieRepository.findByName("Name example").get());
+        //assertNull(movieRepository.findByName("Dont existing name"));
 
     }
 

@@ -1,5 +1,9 @@
 package com.prodyna.movieapp.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -18,9 +22,14 @@ import java.util.Objects;
 import java.util.Set;
 
 @Node
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Actor {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     @NotNull
     @NotBlank
@@ -38,9 +47,6 @@ public class Actor {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    public Actor() {
-    }
-
 
     public Actor( String firstName, String lastName, String biography) {
         this.firstName = firstName;
@@ -48,46 +54,6 @@ public class Actor {
         this.biography = biography;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    public String getBiography() {
-        return biography;
-    }
-
-    public void setBiography(String biography) {
-        this.biography = biography;
-    }
-
-    @Override
-    public String toString() {
-        return "Actor{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", biography='" + biography + '\'' +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {

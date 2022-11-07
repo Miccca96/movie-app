@@ -33,10 +33,7 @@ class ReviewRepositoryTest {
         reviewRepository.deleteAll();
         movieRepository.deleteAll();
     }
-
-    @Test
-    void shouldFindReviewsByMovieID() {
-
+    private Movie createTestMovie(){
         List<Actor> actors = new ArrayList<>();
         List<Review> reviews = new ArrayList<>();
         //given
@@ -48,23 +45,27 @@ class ReviewRepositoryTest {
         Review review = new Review(3,"Bad","Very bad");
         reviews.add(review);
         Movie movie = new Movie("Kiss", "This is teenage movie", Genre.DRAMA, LocalDate.of(2023, 10, 23), Double.valueOf(56.3), actors,reviews);
+        return movie;
+    }
+
+    @Test
+    void shouldFindReviewsByMovieID() {
+
+        Movie movie = createTestMovie();
         Movie createdMovie = movieRepository.save(movie);
         //when
-
         List <Review> databaseReviews = createdMovie.getReviews();
-
-
         //then
-        assertThat(reviews).isEqualTo(databaseReviews);
+        assertThat(createdMovie.getReviews()).isEqualTo(databaseReviews);
 
 
 
     }
     @Test
-    void shouldReturnEmprtyIfMovieIdDoesntExist() {
+    void shouldReturnEmptyIfMovieIdDoesntExist() {
 
         List<Review> allReviews = reviewRepository.getReviewsForMovie(-10L);
-        assertEquals(new ArrayList<>(), allReviews);
+        assertEquals(true, allReviews.isEmpty());
 
     }
     }
