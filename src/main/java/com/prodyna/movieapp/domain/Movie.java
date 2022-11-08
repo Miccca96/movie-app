@@ -1,21 +1,32 @@
 package com.prodyna.movieapp.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import javax.validation.constraints.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Node
+@NoArgsConstructor
+@Getter
+@Setter
 public class Movie {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     @NotNull
     @NotBlank
@@ -29,107 +40,58 @@ public class Movie {
     private Genre genre;
 
     @NotNull
-    private LocalDate relaseDate;
+    private LocalDate releaseDate;
     @NotNull
     private Double durationInMin;
-    @Relationship
+
+    @Transient
+    private Double averageRating;
+
+
+    @Relationship(type = "ACTS IN", direction = Relationship.Direction.INCOMING)
     private List<Actor> actors;
-    @Relationship
+    @Relationship(type = "HAS",direction = Relationship.Direction.OUTGOING)
     private List<Review> reviews;
 
-    public Movie() {
-    }
+
     @CreatedDate
     private LocalDateTime createdDate;
 
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    public Movie(Long id, String name, String desc, Genre genre, LocalDate relaseDate, Double durationInMin, List<Actor> actors, List<Review> reviews, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        this.id = id;
+
+
+    public void calculateAverageRating() {
+        double sum = 0;
+        int count = 0;
+        for (Review r:reviews) {
+            sum += r.getRating();
+            count++;
+        }
+        if(count == 0)
+            this.averageRating = Double.valueOf(0);
+        else{
+        this.averageRating = Double.valueOf((double) sum/count);
+    }}
+
+    public Movie(String name, String desc, Genre genre, LocalDate releaseDate, Double durationInMin, List<Actor> actors, List<Review> reviews) {
         this.name = name;
         this.desc = desc;
         this.genre = genre;
-        this.relaseDate = relaseDate;
+        this.releaseDate = releaseDate;
         this.durationInMin = durationInMin;
         this.actors = actors;
         this.reviews = reviews;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public LocalDate getRelaseDate() {
-        return relaseDate;
-    }
-
-    public void setRelaseDate(LocalDate relaseDate) {
-        this.relaseDate = relaseDate;
-    }
-
-    public Double getDurationInMin() {
-        return durationInMin;
-    }
-
-    public void setDurationInMin(Double durationInMin) {
-        this.durationInMin = durationInMin;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public List<Actor> getActors() {
-        return actors;
-    }
-
-    public void setActors(List<Actor> actors) {
-        this.actors = actors;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
 
     @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
-                ", relaseDate=" + relaseDate +
-                ", durationInMin=" + durationInMin +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movie movie = (Movie) o;
+        return Objects.equals(name, movie.name);
     }
+
 }
