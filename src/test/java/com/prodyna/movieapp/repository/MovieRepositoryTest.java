@@ -55,9 +55,9 @@ class MovieRepositoryTest {
         Movie movie = createMovieTest();
         Movie createdMovie = movieRepository.save(movie);
 
-        Optional<Movie> m = movieRepository.findByName(movie.getName());
+        Optional<Movie> movieDatabase = movieRepository.findByName(movie.getName());
 
-        assertThat(m.get()).isEqualTo(movie);
+        assertThat(movieDatabase.get()).isEqualTo(movie);
 
 
     }
