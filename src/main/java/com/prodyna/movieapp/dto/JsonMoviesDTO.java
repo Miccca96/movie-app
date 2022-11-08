@@ -14,7 +14,6 @@ import lombok.Setter;
 @Setter
 public class JsonMoviesDTO {
 
-
     List<MovieDTO> movies = new ArrayList<>();
 
 }

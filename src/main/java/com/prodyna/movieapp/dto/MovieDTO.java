@@ -21,7 +21,6 @@ public class MovieDTO {
     private Double durationMins;
     private String description;
     private List<ReviewDTO> reviews;
-
     private Genre genre;
 
 

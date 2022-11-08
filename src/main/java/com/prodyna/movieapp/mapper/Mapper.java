@@ -30,20 +30,7 @@ public class Mapper {
         this.validator = validator;
     }
 
-//    public Actor mapActorDTOToActor(ActorDTO actorDTO) throws IOException {
-//        Actor actor = new Actor(actorDTO.getFirstName(), actorDTO.getLastName(), actorDTO.getBiography());
-//
-//        Set<ConstraintViolation<Actor>> violations = validator.validate(actor);
-//
-//        if (!violations.isEmpty()) {
-//            for (ConstraintViolation violation : violations) {
-//                log.warn(violation.getMessage());
-//            }
-//            throw new IOException("ActorDTO - validation error");
-//        }
-//
-//        return actor;
-//    }
+
     public Movie mapMovieDTOToMovie(MovieDTO movieDTO) throws IOException {
 
         Movie movie = new Movie();
@@ -56,14 +43,7 @@ public class Mapper {
         movie.setReleaseDate(inputDate);
         movie.setDurationInMin(movieDTO.getDurationMins());
 
-//        Set<ConstraintViolation<Movie>> violations = validator.validate(movie);
-//
-//        if (!violations.isEmpty()) {
-//            for (ConstraintViolation violation : violations) {
-//                log.warn(violation.getMessage());
-//            }
-//            throw new IOException("MovieDTO - validation error");
-//        }
+
         for (ActorDTO actorDTO:movieDTO.getActors()) {
             Actor a = new Actor(actorDTO.getFirstName(),actorDTO.getLastName(),actorDTO.getBiography());
             actors.add(a);
@@ -79,15 +59,5 @@ public class Mapper {
 
         return movie;
     }
-//    public Review mapReviewDTOToReview(ReviewDTO reviewDTO) throws IOException{
-//        Review review = new Review(reviewDTO.getRating(),reviewDTO.getTitle(), reviewDTO.getDescription());
-//        Set<ConstraintViolation<Review>> violations = validator.validate(review);
-//        if(!violations.isEmpty()){
-//            for (ConstraintViolation violation:violations) {
-//                log.warn(violation.getMessage());
-//            }
-//            throw new IOException("ReviewDTO - validation error");
-//        }
-//        return review;
-//    }
+
 }

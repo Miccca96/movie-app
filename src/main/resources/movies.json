@@ -4,9 +4,9 @@
          {
             "name":"Top Gun: Maverick",
             "actors":[
-               {"firstName": "Tom", "lastName": "Cruise"},
+               {"firstName": "Tom", "lastName": "Cruise","biography":"Thomas Cruise Mapother IV, known professionally as Tom Cruise, is an American actor and producer. One of the world's highest-paid actors, he has received various accolades, including an Honorary Palme d'Or and three Golden Globe Awards, in addition to nominations for three Academy Awards."},
                {"firstName": "Jennifer", "lastName": "Connelly"},
-               {"firstName": "Miles", "lastName": "Teller"}
+               {"firstName": "Miles", "lastName": "Teller","biography":"Born in Pennsylvania, Miles Teller developed a passion for acting as a high school student in Florida. After surviving a life-threatening car accident that left his face scarred, he emerged as an actor to watch with acclaimed performances in Rabbit Hole (2010), The Spectacular Now (2013) and Whiplash (2014)."}
             ],
             "genre":"ACTION",
             "releaseDate": 2022,
@@ -30,8 +30,8 @@
          {
             "name":"The Talented Mr. Ripley",
             "actors":[
-               {"firstName": "Matt", "lastName": "Damon"},
-               {"firstName": "Gwyneth", "lastName": "Paltrow"},
+               {"firstName": "Matt", "lastName": "Damon","biography": "Matthew Paige Damon is an American actor, film producer, and screenwriter. Ranked among Forbes' most bankable stars, the films in which he has appeared have collectively earned over $3.88 billion at the North American box office, making him one of the highest-grossing actors of all time."},
+               {"firstName": "Gwyneth", "lastName": "Paltrow","biography": "Gwyneth Kate Paltrow is an American actress. She is the recipient of various accolades, including an Academy Award, a Golden Globe Award, and a Primetime Emmy Award. Paltrow gained notice for her early work in films such as Seven, Emma, Sliding Doors, and A Perfect Murder."},
                {"firstName": "Jude", "lastName": "Law"}
             ],
             "genre": "DRAMA",
@@ -58,7 +58,7 @@
             "actors":[
                {"firstName": "Elijah", "lastName": "Wood"},
                {"firstName": "Ian", "lastName": "McKellen"},
-               {"firstName": "Orlando", "lastName": "Bloom"}
+               {"firstName": "Orlando", "lastName": "Bloom","biography": "Orlando Jonathan Blanchard Copeland Bloom is an English actor. He made his breakthrough as the character Legolas in The Lord of the Rings film series The Fellowship of the Ring, The Two Towers, and The Return of the King. He reprised his role in The Hobbit film series."}
             ],
             "genre":"ADVENTURE",
             "releaseDate": 2001,
@@ -80,7 +80,7 @@
          {
             "name":"The Bourne Identity",
             "actors":[
-               {"firstName": "Matt", "lastName": "Damon"},
+               {"firstName": "Matt", "lastName": "Damon","biography": "Matthew Paige Damon is an American actor, film producer, and screenwriter. Ranked among Forbes' most bankable stars, the films in which he has appeared have collectively earned over $3.88 billion at the North American box office, making him one of the highest-grossing actors of all time."},
                {"firstName": "Franka", "lastName": "Potente"},
                {"firstName": "Chris", "lastName": "Cooper"}
             ],
@@ -107,7 +107,7 @@
          {
             "name":"The Batman",
             "actors":[
-               {"firstName": "Robert", "lastName": "Pattinson"},
+               {"firstName": "Robert", "lastName": "Pattinson","biography": "Robert Douglas Thomas Pattinson is an English actor. Known for starring in both big-budget and independent films, Pattinson has ranked among the world's highest-paid actors. In 2010, Time magazine named him one of the 100 most influential people in the world, and he was featured in the Forbes Celebrity 100 list."},
                {"firstName": "Zoë", "lastName": "Kravitz"},
                {"firstName": "Jeffrey", "lastName": "Wright"}
             ],
@@ -133,7 +133,7 @@
          {
             "name":"Star Wars",
             "actors":[
-               {"firstName": "Mark", "lastName": "Hamill"},
+               {"firstName": "Mark", "lastName": "Hamill","biography": "Mark Richard Hamill is an American actor and writer. He is known for his role as Luke Skywalker in the Star Wars film series, beginning with the original 1977 film and subsequently winning three Saturn Awards for his performances in The Empire Strikes Back, Return of the Jedi, and The Last Jedi."},
                {"firstName": "Carrie", "lastName": "Fisher"},
                {"firstName": "Harrison", "lastName": "Ford"}
             ],
@@ -155,7 +155,7 @@
          {
             "name":"Jumanji",
             "actors":[
-               {"firstName": "Robin", "lastName": "Williams"},
+               {"firstName": "Robin", "lastName": "Williams","biography": "Robin McLaurin Williams was an American actor and comedian. Known for his improvisational skills and the wide variety of characters he created on the spur of the moment and portrayed on film, in dramas and comedies alike, he is regarded as one of the greatest comedians of all time."},
                {"firstName": "Bonnie", "lastName": "Hunt"},
                {"firstName": "Kirsten", "lastName": "Dunst"}
             ],
@@ -180,7 +180,7 @@
             "actors":[
                {"firstName": "Leonardo", "lastName": "DiCaprio"},
                {"firstName": "Joseph", "lastName": "Gordon-Levitt"},
-               {"firstName": "Tom", "lastName": "Hardy"}
+               {"firstName": "Tom", "lastName": "Hardy","biography": "Edward Thomas Hardy CBE is an English actor. After studying acting at the Drama Centre London, he made his film debut in Ridley Scott's Black Hawk Down."}
             ],
             "genre":"ACTION",
             "releaseDate": 2010,

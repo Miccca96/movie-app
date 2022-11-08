@@ -1,6 +1,6 @@
 package com.prodyna.movieapp.database;
 
-import com.prodyna.movieapp.service.JsonDataService;
+import com.prodyna.movieapp.service.InitLoadService;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInit {
 
-    private final JsonDataService jsonDataService;
+    private final InitLoadService jsonDataService;
 
     @Autowired
-    public DataInit(JsonDataService jsonDataService) {
+    public DataInit(InitLoadService jsonDataService) {
         this.jsonDataService = jsonDataService;
     }
 

@@ -13,7 +13,6 @@ public class ActorDTO {
 
     private String firstName;
     private String lastName;
-
     private String biography;
 
 

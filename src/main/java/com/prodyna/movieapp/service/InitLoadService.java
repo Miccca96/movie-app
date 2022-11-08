@@ -1,6 +1,5 @@
 package com.prodyna.movieapp.service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Movie;
@@ -15,43 +14,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class JsonDataService {
+@Slf4j
+public class InitLoadService {
 
     private final ActorRepository actorRepository;
     private final MovieRepository movieRepository;
     private final ReviewRepository reviewRepository;
     private final Mapper mapper;
 
-
     @Autowired
-    public JsonDataService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper) {
+    public InitLoadService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper) {
         this.actorRepository = actorRepository;
         this.movieRepository = movieRepository;
         this.reviewRepository = reviewRepository;
         this.mapper = mapper;
     }
+
     @Transactional(rollbackFor = Exception.class)
     public void fillDatabase() throws Exception {
-        System.out.println("hello");
+        log.info("Application started and method was invoked");
         JsonMoviesDTO data = new JsonMoviesDTO();
 
         data = convertJsonToObjects("movies.json", JsonMoviesDTO.class);
 
-        saveData(data);
+        processData(data);
 
     }
 
-    private void saveData(JsonMoviesDTO data) throws IOException {
-
-
+    private void processData(JsonMoviesDTO data) throws IOException {
 
         for (MovieDTO movie : data.getMovies()) {
             Movie m = mapper.mapMovieDTOToMovie(movie);
