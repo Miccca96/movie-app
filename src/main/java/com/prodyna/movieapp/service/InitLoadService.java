@@ -3,6 +3,7 @@ package com.prodyna.movieapp.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Movie;
+import com.prodyna.movieapp.domain.Review;
 import com.prodyna.movieapp.dto.JsonMoviesDTO;
 import com.prodyna.movieapp.dto.MovieDTO;
 import com.prodyna.movieapp.mapper.Mapper;
@@ -28,12 +29,15 @@ public class InitLoadService {
     private final ReviewRepository reviewRepository;
     private final Mapper mapper;
 
+    private final ValidationService validationService;
+
     @Autowired
-    public InitLoadService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper) {
+    public InitLoadService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper, ValidationService validationService) {
         this.actorRepository = actorRepository;
         this.movieRepository = movieRepository;
         this.reviewRepository = reviewRepository;
         this.mapper = mapper;
+        this.validationService = validationService;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -51,6 +55,14 @@ public class InitLoadService {
 
         for (MovieDTO movie : data.getMovies()) {
             Movie m = mapper.mapMovieDTOToMovie(movie);
+            validationService.validate(m);
+            for (Actor actor:m.getActors()) {
+                validationService.validate(actor);
+            }
+            for (Review review:m.getReviews()){
+                validationService.validate(review);
+            }
+            validationService.validate(m.getActors());
             Optional<Movie> movie1 = movieRepository.findByNameAndReleaseDate(m.getName(), m.getReleaseDate());
             if(movie1.isPresent())
                 continue;
