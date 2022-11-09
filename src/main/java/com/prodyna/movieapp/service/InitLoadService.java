@@ -3,9 +3,7 @@ package com.prodyna.movieapp.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Movie;
-import com.prodyna.movieapp.domain.Review;
 import com.prodyna.movieapp.dto.JsonMoviesDTO;
-import com.prodyna.movieapp.dto.MovieDTO;
 import com.prodyna.movieapp.mapper.Mapper;
 import com.prodyna.movieapp.repository.ActorRepository;
 import com.prodyna.movieapp.repository.MovieRepository;
@@ -15,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,22 +52,44 @@ public class InitLoadService {
 
     private void processData(JsonMoviesDTO data) throws IOException {
 
-        for (MovieDTO movie : data.getMovies()) {
-            Movie m = mapper.mapMovieDTOToMovie(movie);
-            validationService.validate(m);
-            for (Actor actor:m.getActors()) {
-                validationService.validate(actor);
-            }
-            for (Review review:m.getReviews()){
-                validationService.validate(review);
-            }
-            validationService.validate(m.getActors());
-            Optional<Movie> movie1 = movieRepository.findByNameAndReleaseDate(m.getName(), m.getReleaseDate());
-            if(movie1.isPresent())
-                continue;
-               saveMovie(m);
-            }
-        }
+        List<Movie> movies = data.getMovies().stream().map(m -> mapper.mapMovieDTOToMovie(m)).collect(Collectors.toList());
+
+        movies.stream().forEach(movie -> {
+                    movie.getActors().forEach(actor -> {
+                        try {
+                            validationService.validate(actor);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });});
+
+            movies.stream().forEach(movie1 -> {
+                movie1.getReviews().forEach(review -> {
+                    try {
+                        validationService.validate(review);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+                movies.stream().filter(movie2 -> !movieRepository.findByNameAndReleaseDate(movie2.getName(), movie2.getReleaseDate()).isPresent()).forEach(movie2 -> saveMovie(movie2));
+//           Optional<Movie> movie1 = movieRepository.findByNameAndReleaseDate(m.getName(), m.getReleaseDate());
+
+                });};
+
+
+
+//        for (MovieDTO movie : data.getMovies()) {
+//            Movie m = mapper.mapMovieDTOToMovie(movie);
+//            validationService.validate(m);
+//            for (Actor actor:m.getActors()) {
+//                validationService.validate(actor);
+//            }
+//            for (Review review:m.getReviews()){
+//                validationService.validate(review);
+//            }
+//
+
 
     private void saveMovie(Movie m) {
         List<Actor> actors = new ArrayList<>();
