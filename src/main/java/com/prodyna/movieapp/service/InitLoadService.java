@@ -55,28 +55,33 @@ public class InitLoadService {
         List<Movie> movies = data.getMovies().stream().map(m -> mapper.mapMovieDTOToMovie(m)).collect(Collectors.toList());
 
         movies.stream().forEach(movie -> {
-                    movie.getActors().forEach(actor -> {
-                        try {
-                            validationService.validate(actor);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });});
+            movie.getActors().forEach(actor -> {
+                try {
+                    validationService.validate(actor);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        });
 
-            movies.stream().forEach(movie1 -> {
-                movie1.getReviews().forEach(review -> {
-                    try {
-                        validationService.validate(review);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        movies.stream().forEach(movieInList -> {
+            movieInList.getReviews().forEach(review -> {
+                try {
+                    validationService.validate(review);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
-                movies.stream().filter(movie2 -> !movieRepository.findByNameAndReleaseDate(movie2.getName(), movie2.getReleaseDate()).isPresent()).forEach(movie2 -> saveMovie(movie2));
+            movies.stream().
+                    filter(movieForInsert -> !movieRepository.findByNameAndReleaseDate(movieForInsert.getName(), movieForInsert.getReleaseDate()).isPresent()).
+                    forEach(movieForInsert -> saveMovie(movieForInsert));
 //           Optional<Movie> movie1 = movieRepository.findByNameAndReleaseDate(m.getName(), m.getReleaseDate());
 
-                });};
+        });
+    }
 
+    ;
 
 
 //        for (MovieDTO movie : data.getMovies()) {
@@ -93,21 +98,19 @@ public class InitLoadService {
 
     private void saveMovie(Movie m) {
         List<Actor> actors = new ArrayList<>();
-        for (Actor a:m.getActors()) {
-            Optional<Actor> actor = actorRepository.findByFirstNameAndLastName(a.getFirstName(),a.getLastName());
-            if(actor.isPresent()){
+        for (Actor a : m.getActors()) {
+            Optional<Actor> actor = actorRepository.findByFirstNameAndLastName(a.getFirstName(), a.getLastName());
+            if (actor.isPresent()) {
                 Actor actorDB = actor.get();
                 actors.add(actorDB);
-            }else {
+            } else {
                 Actor actor2 = actorRepository.save(a);
                 actors.add(actor2);
             }
-
         }
         m.setActors(actors);
         movieRepository.save(m);
     }
-
 
     private <T> T convertJsonToObjects(String fileName, Class<T> classType) {
         T t = null;
@@ -123,6 +126,4 @@ public class InitLoadService {
 
         return t;
     }
-
-
 }
