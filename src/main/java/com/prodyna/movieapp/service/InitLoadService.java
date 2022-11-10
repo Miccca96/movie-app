@@ -30,6 +30,8 @@ public class InitLoadService {
 
     private final ValidationService validationService;
 
+    private static final String path = "src/main/resources/";
+
     @Autowired
     public InitLoadService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper, ValidationService validationService) {
         this.actorRepository = actorRepository;
@@ -52,8 +54,11 @@ public class InitLoadService {
 
     private void processData(JsonMoviesDTO data) throws IOException {
 
-        List<Movie> movies = data.getMovies().stream().map(m -> mapper.mapMovieDTOToMovie(m)).collect(Collectors.toList());
+        List<Movie> movies = data.getMovies().stream().
+                map(m -> mapper.mapMovieDTOToMovie(m)).
+                collect(Collectors.toList());
 
+        
         movies.stream().forEach(movie -> {
             movie.getActors().forEach(actor -> {
                 try {
@@ -76,25 +81,8 @@ public class InitLoadService {
             movies.stream().
                     filter(movieForInsert -> !movieRepository.findByNameAndReleaseDate(movieForInsert.getName(), movieForInsert.getReleaseDate()).isPresent()).
                     forEach(movieForInsert -> saveMovie(movieForInsert));
-//           Optional<Movie> movie1 = movieRepository.findByNameAndReleaseDate(m.getName(), m.getReleaseDate());
-
         });
     }
-
-    ;
-
-
-//        for (MovieDTO movie : data.getMovies()) {
-//            Movie m = mapper.mapMovieDTOToMovie(movie);
-//            validationService.validate(m);
-//            for (Actor actor:m.getActors()) {
-//                validationService.validate(actor);
-//            }
-//            for (Review review:m.getReviews()){
-//                validationService.validate(review);
-//            }
-//
-
 
     private void saveMovie(Movie m) {
         List<Actor> actors = new ArrayList<>();
@@ -114,11 +102,10 @@ public class InitLoadService {
 
     private <T> T convertJsonToObjects(String fileName, Class<T> classType) {
         T t = null;
-        File file = new File("src/main/resources/" + fileName);
+        File file = new File(path + fileName);
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            //mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
             t = mapper.readValue(file, classType);
         } catch (Exception e) {
             e.printStackTrace();

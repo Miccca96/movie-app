@@ -30,8 +30,7 @@ public class Mapper {
         this.validator = validator;
     }
 
-
-    public Movie mapMovieDTOToMovie(MovieDTO movieDTO) throws IOException {
+    public Movie mapMovieDTOToMovie(MovieDTO movieDTO) {
 
         Movie movie = new Movie();
         List<Actor> actors = new ArrayList<>();
@@ -39,22 +38,24 @@ public class Mapper {
         movie.setName(movieDTO.getName());
         movie.setDesc(movieDTO.getDescription());
         movie.setGenre(movieDTO.getGenre());
-        LocalDate inputDate = LocalDate.of(movieDTO.getReleaseDate(),1,1);
+        LocalDate inputDate = LocalDate.of(movieDTO.getReleaseDate(), 1, 1);
         movie.setReleaseDate(inputDate);
         movie.setDurationInMin(movieDTO.getDurationMins());
 
+        movieDTO.getActors().stream().
+                forEach(actorDTO -> {
+                    Actor actor = new Actor(actorDTO.getFirstName(), actorDTO.getLastName(), actorDTO.getBiography());
+                    actors.add(actor);
+                });
 
-        for (ActorDTO actorDTO:movieDTO.getActors()) {
-            Actor a = new Actor(actorDTO.getFirstName(),actorDTO.getLastName(),actorDTO.getBiography());
-            actors.add(a);
-            
-        }
         movie.setActors(actors);
 
-        for (ReviewDTO reviewDTO: movieDTO.getReviews()) {
-            Review r = new Review(reviewDTO.getRating(),reviewDTO.getTitle(),reviewDTO.getDescription());
-            reviews.add(r);
-        }
+        movieDTO.getReviews().stream().
+                forEach(reviewDTO -> {
+                    Review review = new Review(reviewDTO.getRating(), reviewDTO.getTitle(), reviewDTO.getDescription());
+                    reviews.add(review);
+                });
+
         movie.setReviews(reviews);
 
         return movie;
