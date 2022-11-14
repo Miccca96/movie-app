@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  neo4j-db:
+    image: neo4j:5.1.0-community
+    ports:
+      - 7474:7474 # HTTP
+      - 7687:7687 # Bolt
+    environment:
+      NEO4J_AUTH: neo4j/secret
