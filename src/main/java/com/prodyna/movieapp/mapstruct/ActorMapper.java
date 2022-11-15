@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ActorMapper {
 
+
     ActorDTO mapActorToActorDTO(Actor actor);
 
     @Mapping(target = "id", ignore = true)

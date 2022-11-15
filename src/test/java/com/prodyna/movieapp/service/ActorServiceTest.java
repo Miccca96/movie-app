@@ -38,6 +38,8 @@ class ActorServiceTest {
     private ActorDTO actorDTO;
     private Actor savedActor;
 
+    private ActorDTO savedActorDTO;
+
     private Actor actorForSaving;
     private Actor actorTom;
 
@@ -55,6 +57,13 @@ class ActorServiceTest {
                 .build();
 
         savedActor = Actor.builder()
+                .id(1L)
+                .firstName("Klara")
+                .lastName("Mitrovic")
+                .biography("Java developer")
+                .build();
+
+        savedActorDTO = ActorDTO.builder()
                 .id(1L)
                 .firstName("Klara")
                 .lastName("Mitrovic")
@@ -108,14 +117,15 @@ class ActorServiceTest {
         Assertions.assertEquals(actorForMapping, actorForSaving);
 
         when(actorRepository.save(actorForSaving)).thenReturn(savedActor);
+        when(actorMapper.mapActorToActorDTO(savedActor)).thenReturn(savedActorDTO);
 
-        Actor actorDB = actorService.createActor(actorDTO);
+        ActorDTO actorDB = actorService.createActor(actorDTO);
 
         Assertions.assertDoesNotThrow(() -> {
             actorService.createActor(actorDTO);
         });
         Assertions.assertNotNull(actorDB);
-        Assertions.assertEquals(savedActor, actorDB);
+        Assertions.assertEquals(savedActorDTO, actorDB);
 
     }
 

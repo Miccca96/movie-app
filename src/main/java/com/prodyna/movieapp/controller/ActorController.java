@@ -25,8 +25,8 @@ public class ActorController {
     }
 
     @PostMapping
-    public ResponseEntity<Actor> createActor(@RequestBody @Valid ActorDTO actor) {
-        Actor createdActor = actorService.createActor(actor);
+    public ResponseEntity<ActorDTO> createActor(@RequestBody @Valid ActorDTO actor) {
+        ActorDTO createdActor = actorService.createActor(actor);
         return new ResponseEntity<>(createdActor, HttpStatus.OK);
 
     }

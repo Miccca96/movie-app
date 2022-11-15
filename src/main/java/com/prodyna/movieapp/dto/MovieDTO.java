@@ -30,5 +30,6 @@ public class MovieDTO {
     private List<ReviewDTO> reviews;
     @NotNull
     private Genre genre;
+    private Double averageRating;
 
 }

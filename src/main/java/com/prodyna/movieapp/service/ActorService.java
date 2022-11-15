@@ -30,14 +30,15 @@ public class ActorService {
         this.actorMapper = actorMapper;
     }
 
-    public Actor createActor(ActorDTO actor) {
+    public ActorDTO createActor(ActorDTO actor) {
         Optional<Actor> actorDB = actorRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName());
         if (actorDB.isPresent()) {
             throw new ActorAlreadyExistException("Actor with this name already exist in database");
         }
         Actor createdActor = actorMapper.mapActorDTOToActor(actor);
         Actor savedActor = actorRepository.save(createdActor);
-        return savedActor;
+        ActorDTO actorDTO = actorMapper.mapActorToActorDTO(savedActor);
+        return actorDTO;
 
     }
 
