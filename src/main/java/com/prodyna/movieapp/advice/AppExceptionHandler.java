@@ -15,23 +15,26 @@ public class AppExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String,String> handleInvalidArgument(MethodArgumentNotValidException ex){
-        Map<String,String> errorMap = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error->{errorMap.put(error.getField(),error.getDefaultMessage());});
-        return  errorMap;
+    public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().
+                forEach(error -> {
+                    errorMap.put(error.getField(), error.getDefaultMessage());
+                });
+        return errorMap;
     }
 
     @ExceptionHandler(ActorNotFoundException.class)
-    public Map<String,String> handleBusinessException(ActorNotFoundException ex){
-        Map<String,String> errorMap = new HashMap<>();
-        errorMap.put("error message ",ex.getMessage());
+    public Map<String, String> handleBusinessException(ActorNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error message ", ex.getMessage());
         return errorMap;
     }
 
     @ExceptionHandler(ActorAlreadyExistException.class)
-    public Map<String,String> handleBusinessException(ActorAlreadyExistException ex){
-        Map<String,String> errorMap = new HashMap<>();
-        errorMap.put("error message ",ex.getMessage());
+    public Map<String, String> handleBusinessException(ActorAlreadyExistException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error message ", ex.getMessage());
         return errorMap;
     }
 

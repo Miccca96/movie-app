@@ -24,7 +24,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 @ExtendWith(MockitoExtension.class)
 class ActorServiceTest {
 
@@ -37,16 +36,11 @@ class ActorServiceTest {
     private ActorService actorService;
     private ActorDTO actorDTO;
     private Actor savedActor;
-
     private ActorDTO savedActorDTO;
-
     private Actor actorForSaving;
     private Actor actorTom;
-
     private Actor updateActor;
-
     private Actor updatedActor;
-
     private ActorDTO updatedActorDTO;
 
     private void init() {
@@ -100,7 +94,6 @@ class ActorServiceTest {
                 .lastName("Morgan")
                 .biography("This is my biography")
                 .build();
-
     }
 
     @BeforeEach
@@ -117,16 +110,10 @@ class ActorServiceTest {
         Assertions.assertEquals(actorForMapping, actorForSaving);
 
         when(actorRepository.save(actorForSaving)).thenReturn(savedActor);
-        when(actorMapper.mapActorToActorDTO(savedActor)).thenReturn(savedActorDTO);
-
-        ActorDTO actorDB = actorService.createActor(actorDTO);
 
         Assertions.assertDoesNotThrow(() -> {
             actorService.createActor(actorDTO);
         });
-        Assertions.assertNotNull(actorDB);
-        Assertions.assertEquals(savedActorDTO, actorDB);
-
     }
 
     @Test
@@ -144,49 +131,40 @@ class ActorServiceTest {
     }
 
     @Test
-    void shouldUpdateActor() {
+    void shouldUpdateActor() throws ActorNotFoundException {
 
         given(actorRepository.findById(1L)).willReturn(Optional.of(savedActor));
 
         given(actorRepository.save(updatedActor)).willReturn(updatedActor);
         given(actorMapper.mapActorToActorDTO(updatedActor)).willReturn(updatedActorDTO);
 
-        try {
-            ActorDTO actorUpdated = actorService.updateActor(1L, updatedActorDTO);
-            Assertions.assertNotNull(actorUpdated);
-            Assertions.assertEquals(actorUpdated, updatedActorDTO);
-        } catch (ActorNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
+        Assertions.assertDoesNotThrow(() -> actorService.updateActor(1L, updatedActorDTO));
+        ActorDTO actorUpdated = actorService.updateActor(1L, updatedActorDTO);
+        Assertions.assertNotNull(actorUpdated);
+        Assertions.assertEquals(actorUpdated, updatedActorDTO);
 
     }
 
     @Test
-    void shouldDeleteActor() {
+    void shouldDeleteActor() throws ActorNotFoundException {
 
         given(actorRepository.findById(1L)).willReturn(Optional.of(savedActor));
         willDoNothing().given(actorRepository).deleteById(1L);
 
-        try {
-            actorService.deleteActor(1L);
-        } catch (ActorNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        Assertions.assertDoesNotThrow(() -> actorService.deleteActor(1L));
+        actorService.deleteActor(1L);
         verify(actorRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    public void shouldThrowExWhenIdDoesntExist(){
+    public void shouldThrowExWhenIdDoesntExist() {
 
         when(actorRepository.findById(-100L)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(ActorNotFoundException.class,()->{
+        Assertions.assertThrows(ActorNotFoundException.class, () -> {
             actorService.findActorById(-100L);
         });
-
     }
-
 
     @Test
     public void shouldFindActorById() throws ActorNotFoundException {
@@ -194,12 +172,9 @@ class ActorServiceTest {
         when(actorRepository.findById(1L)).thenReturn(Optional.of(savedActor));
         when(actorMapper.mapActorToActorDTO(savedActor)).thenReturn(savedActorDTO);
 
-        Assertions.assertDoesNotThrow(()->actorService.findActorById(1L));
+        Assertions.assertDoesNotThrow(() -> actorService.findActorById(1L));
         ActorDTO actorDTO = actorService.findActorById(1L);
-        Assertions.assertEquals(savedActorDTO,actorDTO);
-
+        Assertions.assertEquals(savedActorDTO, actorDTO);
 
     }
-
-
 }

@@ -21,7 +21,6 @@ import java.util.Optional;
 public class ActorService {
 
     private final ActorRepository actorRepository;
-
     private final ActorMapper actorMapper;
 
     @Autowired
@@ -30,25 +29,20 @@ public class ActorService {
         this.actorMapper = actorMapper;
     }
 
-    public ActorDTO createActor(ActorDTO actor) {
+    public void createActor(ActorDTO actor) {
         Optional<Actor> actorDB = actorRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName());
         if (actorDB.isPresent()) {
+
             throw new ActorAlreadyExistException("Actor with this name already exist in database");
         }
         Actor createdActor = actorMapper.mapActorDTOToActor(actor);
         Actor savedActor = actorRepository.save(createdActor);
-        ActorDTO actorDTO = actorMapper.mapActorToActorDTO(savedActor);
-        return actorDTO;
-
     }
-
-//    public List<Actor> getActors() {
-//        return actorRepository.findAll();
-//    }
 
     public ActorDTO updateActor(Long id, ActorDTO actor) throws ActorNotFoundException {
         Optional<Actor> actorDB = actorRepository.findById(id);
         if (actorDB.isPresent()) {
+
             Actor actorForUpdate = actorDB.get();
             actorForUpdate.setFirstName(actor.getFirstName());
             actorForUpdate.setLastName(actor.getLastName());
@@ -63,10 +57,10 @@ public class ActorService {
     public void deleteActor(Long id) throws ActorNotFoundException {
         Optional<Actor> actor = actorRepository.findById(id);
         if (actor.isPresent()) {
+
             actorRepository.deleteById(id);
-        } else {
-            throw new ActorNotFoundException("Actor with given id: " + id + " doesn't exist in databse");
         }
+        throw new ActorNotFoundException("Actor with given id: " + id + " doesn't exist in databse");
     }
 
 
@@ -79,6 +73,7 @@ public class ActorService {
     public ActorDTO findActorById(Long id) throws ActorNotFoundException {
         Optional<Actor> actor = actorRepository.findById(id);
         if (actor.isPresent()) {
+
             Actor foundActor = actor.get();
             return actorMapper.mapActorToActorDTO(foundActor);
         }
