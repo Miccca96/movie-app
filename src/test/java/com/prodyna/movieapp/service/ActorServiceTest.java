@@ -176,5 +176,30 @@ class ActorServiceTest {
         verify(actorRepository, times(1)).deleteById(1L);
     }
 
+    @Test
+    public void shouldThrowExWhenIdDoesntExist(){
+
+        when(actorRepository.findById(-100L)).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(ActorNotFoundException.class,()->{
+            actorService.findActorById(-100L);
+        });
+
+    }
+
+
+    @Test
+    public void shouldFindActorById() throws ActorNotFoundException {
+
+        when(actorRepository.findById(1L)).thenReturn(Optional.of(savedActor));
+        when(actorMapper.mapActorToActorDTO(savedActor)).thenReturn(savedActorDTO);
+
+        Assertions.assertDoesNotThrow(()->actorService.findActorById(1L));
+        ActorDTO actorDTO = actorService.findActorById(1L);
+        Assertions.assertEquals(savedActorDTO,actorDTO);
+
+
+    }
+
 
 }

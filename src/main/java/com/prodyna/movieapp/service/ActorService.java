@@ -76,10 +76,11 @@ public class ActorService {
         return actorDTOS;
     }
 
-    public Actor findActorById(Long id) throws ActorNotFoundException {
+    public ActorDTO findActorById(Long id) throws ActorNotFoundException {
         Optional<Actor> actor = actorRepository.findById(id);
         if (actor.isPresent()) {
-            return actor.get();
+            Actor foundActor = actor.get();
+            return actorMapper.mapActorToActorDTO(foundActor);
         }
         throw new ActorNotFoundException("Actor with given id: " + id + " doesnt exist");
     }

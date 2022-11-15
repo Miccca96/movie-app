@@ -38,8 +38,8 @@ public class ActorController {
     }
 
     @GetMapping(path = "/{id}")
-    public Actor findActorById(@PathVariable Long id) throws ActorNotFoundException {
-        Actor actor = actorService.findActorById(id);
+    public ActorDTO findActorById(@PathVariable Long id) throws ActorNotFoundException {
+        ActorDTO actor = actorService.findActorById(id);
         return actor;
     }
 
