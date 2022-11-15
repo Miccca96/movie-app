@@ -25,7 +25,7 @@ public class Review {
     @Min(1)
     @Max(5)
     private Integer rating;
-    @NotNull
+
     @NotBlank
     @Size(min = 3,max = 100)
     private String title;

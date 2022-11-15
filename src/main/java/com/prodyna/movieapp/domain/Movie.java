@@ -28,11 +28,11 @@ public class Movie {
     @Id
     @GeneratedValue
     private Long id;
-    @NotNull
+
     @NotBlank
     private String name;
 
-    @NotNull
+
     @Size(max = 1000)
     private String desc;
 
