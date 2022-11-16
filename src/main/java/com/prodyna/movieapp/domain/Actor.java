@@ -1,5 +1,7 @@
 package com.prodyna.movieapp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,16 +27,18 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @ToString
 public class Actor {
 
     @Id
     @GeneratedValue
     private Long id;
-    @NotNull
+
     @NotBlank
     private String firstName;
-    @NotNull
+
     @NotBlank
     private String lastName;
 

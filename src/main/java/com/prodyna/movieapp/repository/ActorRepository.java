@@ -14,5 +14,9 @@ public interface ActorRepository extends Neo4jRepository<Actor,Long> {
     @Query("match (a:Actor)-[:`ACTS IN`]->(m:Movie) where id(m)=$id return a order by id(a)")
     List<Actor> findAllActors(Long id);
 
+    @Query("match (a:Actor) return a order by a.firstName")
+    List<Actor> findAllActorsSortByName();
+
+    Optional<Actor> findById(Long id);
     Optional<Actor> findByFirstNameAndLastName(String firstName, String lastName);
 }

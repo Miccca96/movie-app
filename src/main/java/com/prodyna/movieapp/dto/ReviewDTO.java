@@ -1,5 +1,6 @@
 package com.prodyna.movieapp.dto;
 
+import java.time.LocalDate;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -25,5 +26,6 @@ public class ReviewDTO {
     private Integer rating;
     @Size(max = 1000)
     private String description;
+    private LocalDate createdDate;
 
 }
