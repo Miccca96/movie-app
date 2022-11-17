@@ -44,8 +44,9 @@ public class MovieController {
     }
 
         @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteActor(@PathVariable Long id){
-        movieService.deleteMovie(id);
+    public ResponseEntity<String> deleteMovieWithReviews(@PathVariable Long id){
+        movieService.deleteMovieWithReviews(id);
+        return new ResponseEntity<>("Movie was successfully deleted",HttpStatus.OK);
     }
 
     @GetMapping

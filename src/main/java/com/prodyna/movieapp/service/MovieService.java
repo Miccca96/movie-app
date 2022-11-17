@@ -129,4 +129,8 @@ public class MovieService {
     }
         throw new ObjectNotFoundException(Movie.class.getSimpleName(),id);
     }
+
+    public void deleteMovieWithReviews(Long id) {
+
+    }
 }
