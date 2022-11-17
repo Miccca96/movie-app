@@ -31,7 +31,7 @@ public class Review {
     private String title;
 
     @Size(max = 1000)
-    private String desc;
+    private String description;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -39,10 +39,10 @@ public class Review {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
-    public Review(Integer rating, String title, String desc) {
+    public Review(Integer rating, String title, String description) {
         this.rating = rating;
         this.title = title;
-        this.desc = desc;
+        this.description = description;
     }
 
 

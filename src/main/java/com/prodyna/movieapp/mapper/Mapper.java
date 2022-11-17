@@ -40,7 +40,7 @@ public class Mapper {
         movie.setGenre(movieDTO.getGenre());
         LocalDate inputDate = LocalDate.of(movieDTO.getReleaseDate(), 1, 1);
         movie.setReleaseDate(inputDate);
-        movie.setDurationInMin(movieDTO.getDurationMins());
+        movie.setDurationMins(movieDTO.getDurationMins());
 
         movieDTO.getActors().stream().
                 forEach(actorDTO -> {

@@ -11,20 +11,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class MovieDTO {
-
+    @Id
+    private Long id;
     @NotBlank
     private String name;
     private List<ActorDTO> actors;
     @NotNull
-    private Integer releaseDate;
+    private  Integer releaseDate;
     @NotNull
-    private Double durationMins;
+    private Integer durationMins;
     @Size(max = 1000)
     private String description;
     private List<ReviewDTO> reviews;

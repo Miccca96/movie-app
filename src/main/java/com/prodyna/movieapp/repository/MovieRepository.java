@@ -9,8 +9,6 @@ import org.springframework.data.neo4j.repository.query.Query;
 
 public interface MovieRepository extends Neo4jRepository<Movie,Long> {
 
-    Optional<Movie> findByName(String name);
-
     Optional<Movie> findByNameAndReleaseDate(String name, LocalDate releaseDate);
 
     @Query("match (m:Movie)-[rel]->(r:Review)\n" +

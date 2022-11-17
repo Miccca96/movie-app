@@ -55,7 +55,7 @@ class MovieRepositoryTest {
         Movie movie = createMovieTest();
         Movie createdMovie = movieRepository.save(movie);
 
-        Optional<Movie> movieDatabase = movieRepository.findByName(movie.getName());
+        Optional<Movie> movieDatabase = movieRepository.findByNameAndReleaseDate(movie.getName(),movie.getReleaseDate());
 
         assertThat(movieDatabase.get()).isEqualTo(movie);
 
@@ -65,7 +65,7 @@ class MovieRepositoryTest {
     @Test
     void shouldThrowExcIfNameDoesntExist() {
 
-        Assertions.assertThrows(NoSuchElementException.class, () -> movieRepository.findByName("Name example").get());
+        Assertions.assertThrows(NoSuchElementException.class, () -> movieRepository.findByNameAndReleaseDate("Name example",LocalDate.of(-1,-1,-1)).get());
         //assertNull(movieRepository.findByName("Dont existing name"));
 
     }

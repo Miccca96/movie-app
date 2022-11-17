@@ -5,15 +5,13 @@ import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.exception.ActorAlreadyExistException;
 import com.prodyna.movieapp.exception.ActorNotFoundException;
 import com.prodyna.movieapp.mapstruct.ActorMapper;
-import com.prodyna.movieapp.mapstruct.ActorMapperImpl;
 import com.prodyna.movieapp.repository.ActorRepository;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
