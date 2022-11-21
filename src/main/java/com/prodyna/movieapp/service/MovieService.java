@@ -4,8 +4,9 @@ import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Movie;
 import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.dto.MovieDTO;
+import com.prodyna.movieapp.dto.MovieDTOPatch;
 import com.prodyna.movieapp.dto.ReviewDTO;
-import com.prodyna.movieapp.exception.ObjectAlreadyExistException;
+import com.prodyna.movieapp.exception.MovieAlreadyExist;
 import com.prodyna.movieapp.exception.ObjectNotFoundException;
 import com.prodyna.movieapp.mapstruct.ActorMapper;
 import com.prodyna.movieapp.mapstruct.MovieMapper;
@@ -13,15 +14,18 @@ import com.prodyna.movieapp.mapstruct.ReviewMapper;
 import com.prodyna.movieapp.repository.ActorRepository;
 import com.prodyna.movieapp.repository.MovieRepository;
 import com.prodyna.movieapp.repository.ReviewRepository;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
+@Slf4j
 @Service
 public class MovieService {
 
@@ -47,7 +51,8 @@ public class MovieService {
         Movie movie = movieMapper.mapMovieDTOToMovie(movieDTO);
         Optional<Movie> foundMovie = movieRepository.findByNameAndReleaseDate(movie.getName(), movie.getReleaseDate());
         if (foundMovie.isPresent()) {
-            throw new ObjectAlreadyExistException(Movie.class.getSimpleName(), movie.getId());
+            Movie movieDB = foundMovie.get();
+            throw new MovieAlreadyExist("Movie " + movieDB.getName() + " released in " + movieDB.getReleaseDate() + " already exist in database");
         }
         List<Actor> actors = new ArrayList<>();
         for (Actor a : movie.getActors()) {
@@ -64,28 +69,19 @@ public class MovieService {
         movieRepository.save(movie);
     }
 
-    public void updateMovie(Long id, Movie movie) {
+    public MovieDTO updateMovie(Long id, Movie movie) {
         Optional<Movie> m = movieRepository.findById(id);
         if (m.isPresent()) {
             Movie movie1 = m.get();
             movie1.setName(movie.getName());
             movie1.setDesc(movie.getDesc());
             movie1.setGenre(movie.getGenre());
-            movie1.setActors(movie.getActors());
-            movie1.setReviews(movie.getReviews());
-            movieRepository.save(movie1);
+            Movie updatedMovie = movieRepository.save(movie1);
+            return movieMapper.mapMovieToMovieDTO(updatedMovie);
         }
-        ;
-        System.out.println("Movie with id:" + id + "dont exist in database");
+        throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 
-    //    public void deleteMovie(Long id) {
-//        movieRepository.deleteById(id);
-//    }
-//
-//    public List<Movie> getMoviesByRatings() {
-//    }
-//
     public List<ActorDTO> getActorsInMovie(Long id) {
         Optional<Movie> m = movieRepository.findById(id);
         if (m.isPresent()) {
@@ -95,11 +91,8 @@ public class MovieService {
         }
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
-//
-//    public List<Review> getReviewsForMovie(Long id) {
-//    }
 
-    public Optional<Movie> findMovieByNameAndReleaseDate(String name, LocalDate releaseDate) {
+    public Optional<Movie> findMovieByNameAndReleaseDate(String name, Integer releaseDate) {
         return movieRepository.findByNameAndReleaseDate(name, releaseDate);
     }
 
@@ -112,25 +105,66 @@ public class MovieService {
                     }).collect(Collectors.toList());
             return reviewsDTO;
         }
-        throw new ObjectNotFoundException(Movie.class.getSimpleName(),id);
+        throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 
     public List<MovieDTO> getMoviesByRatings() {
         List<Movie> movies = movieRepository.findAll();
-        List<MovieDTO> movieDTOS = movieMapper.mapListOfMoviesToListOfMoviesDTOs(movies).stream().
+        log.info("Movies + " + movies);
+        List<MovieDTO> movieDTOS = movieMapper.mapListOfMoviesToListOfMoviesDTOs(movies);
+        movieDTOS = movieDTOS.stream().
                 sorted(Comparator.comparing(MovieDTO::getAverageRating).reversed()).collect(Collectors.toList());
         return movieDTOS;
     }
 
     public MovieDTO getMovieById(Long id) {
-        Optional<Movie> movie =movieRepository.findById(id);
-        if(movie.isPresent()){
-        return movieMapper.mapMovieToMovieDTO(movie.get());
-    }
-        throw new ObjectNotFoundException(Movie.class.getSimpleName(),id);
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (movie.isPresent()) {
+            return movieMapper.mapMovieToMovieDTO(movie.get());
+        }
+        throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 
     public void deleteMovieWithReviews(Long id) {
 
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (movie.isPresent()) {
+            movieRepository.deleteMovieAndReviews(id);
+        } else {
+            throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
+        }
+    }
+
+    public MovieDTO partialUpdateMovie(Long id, MovieDTOPatch movieDTO) {
+
+        boolean needUpdate = false;
+        Optional<Movie> movie = movieRepository.findById(id);
+        if (movie.isPresent()) {
+            Movie moviedb = movie.get();
+            if (StringUtils.hasLength(movieDTO.getDescription())) {
+                moviedb.setDesc(movieDTO.getDescription());
+                needUpdate = true;
+            }
+            if (StringUtils.hasLength(movieDTO.getName())) {
+                moviedb.setName(movieDTO.getName());
+                needUpdate = true;
+            }
+
+            if (!ObjectUtils.isEmpty(movieDTO.getReleaseDate()) && StringUtils.hasLength(movieDTO.getReleaseDate().toString())) {
+                moviedb.setReleaseDate(movieDTO.getReleaseDate());
+                needUpdate = true;
+            }
+
+            if (!ObjectUtils.isEmpty(movieDTO.getDurationMins()) && StringUtils.hasLength(movieDTO.getDurationMins().toString())) {
+                moviedb.setDurationMins(movieDTO.getDurationMins());
+                needUpdate = true;
+            }
+
+            if (needUpdate) {
+                Movie patchedMovie = movieRepository.save(moviedb);
+                return movieMapper.mapMovieToMovieDTO(patchedMovie);
+            }
+        }
+        throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 }

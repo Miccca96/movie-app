@@ -1,10 +1,8 @@
 package com.prodyna.movieapp.controller;
 
-import com.prodyna.movieapp.domain.Actor;
-import com.prodyna.movieapp.domain.Movie;
-import com.prodyna.movieapp.domain.Review;
 import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.dto.MovieDTO;
+import com.prodyna.movieapp.dto.MovieDTOPatch;
 import com.prodyna.movieapp.dto.ReviewDTO;
 import com.prodyna.movieapp.service.MovieService;
 import java.util.List;
@@ -39,8 +37,9 @@ public class MovieController {
     }
 
     @PatchMapping(path = "/{id}")
-    public void updateActor(@PathVariable Long id, @RequestBody Movie movie) {
-        movieService.updateMovie(id, movie);
+    public ResponseEntity<MovieDTO> partialUpdateMovie(@PathVariable Long id, @RequestBody MovieDTOPatch movieDTO) {
+        MovieDTO movie = movieService.partialUpdateMovie(id,movieDTO);
+        return new ResponseEntity<>(movie,HttpStatus.CREATED);
     }
 
         @DeleteMapping(path = "/{id}")
@@ -73,10 +72,6 @@ public class MovieController {
         return new ResponseEntity<>(movieDTO, HttpStatus.OK);
     }
 
-//    @GetMapping(path = "/{name}")
-//    public ResponseEntity<Movie> findMovieByName(@PathVariable String name,) {
-//        Movie movie = movieService.findMovieByNameAndReleaseDate(name);
-//        return new ResponseEntity<>(movie, HttpStatus.OK);
-//    }
+
 
 }

@@ -1,5 +1,7 @@
 package com.prodyna.movieapp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +23,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 public class Movie {
 
     @Id
@@ -37,7 +41,7 @@ public class Movie {
     private Genre genre;
 
     @NotNull
-    private LocalDate releaseDate;
+    private Integer releaseDate;
     @NotNull
     private Integer durationMins;
 
@@ -57,7 +61,7 @@ public class Movie {
     private LocalDateTime modifiedDate;
 
 
-    public Movie(String name, String desc, Genre genre, LocalDate releaseDate, Integer durationInMin, List<Actor> actors, List<Review> reviews) {
+    public Movie(String name, String desc, Genre genre, Integer releaseDate, Integer durationInMin, List<Actor> actors, List<Review> reviews) {
         this.name = name;
         this.desc = desc;
         this.genre = genre;

@@ -44,7 +44,7 @@ class MovieRepositoryTest {
         actors.add(actor);
         Review review = new Review(3, "Bad", "Very bad");
         reviews.add(review);
-        Movie movie = new Movie("Kiss", "This is teenage movie", Genre.DRAMA, LocalDate.of(2023, 10, 23), Double.valueOf(56.3), actors, reviews);
+        Movie movie = new Movie("Kiss", "This is teenage movie", Genre.DRAMA, 2020, 56, actors, reviews);
         return movie;
     }
 
@@ -65,7 +65,7 @@ class MovieRepositoryTest {
     @Test
     void shouldThrowExcIfNameDoesntExist() {
 
-        Assertions.assertThrows(NoSuchElementException.class, () -> movieRepository.findByNameAndReleaseDate("Name example",LocalDate.of(-1,-1,-1)).get());
+        Assertions.assertThrows(NoSuchElementException.class, () -> movieRepository.findByNameAndReleaseDate("Name example",-2000).get());
         //assertNull(movieRepository.findByName("Dont existing name"));
 
     }

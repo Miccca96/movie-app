@@ -40,13 +40,13 @@ public class AppExceptionHandler {
 //        errorMap.put("error message ", ex.getMessage());
 //        return errorMap;
 //    }
-//
-//    @ExceptionHandler(MovieAlreadyExist.class)
-//    public Map<String, String> handleBusinessException(MovieAlreadyExist ex) {
-//        Map<String, String> errorMap = new HashMap<>();
-//        errorMap.put("error message ", ex.getMessage());
-//        return errorMap;
-//    }
+
+    @ExceptionHandler(MovieAlreadyExist.class)
+    public Map<String, String> handleBusinessException(MovieAlreadyExist ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error message ", ex.getMessage());
+        return errorMap;
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ObjectNotFoundException.class)
@@ -59,6 +59,14 @@ public class AppExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ObjectAlreadyExistException.class)
     public Map<String, String> handleBusinessException(ObjectAlreadyExistException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error message ", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RuntimeException.class)
+    public Map<String, String> handleBusinessException(RuntimeException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error message ", ex.getMessage());
         return errorMap;
