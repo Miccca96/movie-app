@@ -2,8 +2,7 @@ package com.prodyna.movieapp.service;
 
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.dto.ActorDTO;
-import com.prodyna.movieapp.exception.ActorAlreadyExistException;
-import com.prodyna.movieapp.exception.ActorNotFoundException;
+import com.prodyna.movieapp.exception.ObjectNotFoundException;
 import com.prodyna.movieapp.mapstruct.ActorMapper;
 import com.prodyna.movieapp.repository.ActorRepository;
 import java.util.List;
@@ -31,13 +30,13 @@ public class ActorService {
         Optional<Actor> actorDB = actorRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName());
         if (actorDB.isPresent()) {
 
-            throw new ActorAlreadyExistException("Actor with this name already exist in database");
+            throw new RuntimeException("Actor " + actorDB.get().getFirstName() + " " + actorDB.get().getLastName() + " already exist in database");
         }
         Actor createdActor = actorMapper.mapActorDTOToActor(actor);
         Actor savedActor = actorRepository.save(createdActor);
     }
 
-    public ActorDTO updateActor(Long id, ActorDTO actor) throws ActorNotFoundException {
+    public ActorDTO updateActor(Long id, ActorDTO actor) {
         Optional<Actor> actorDB = actorRepository.findById(id);
         if (actorDB.isPresent()) {
 
@@ -49,16 +48,17 @@ public class ActorService {
             Actor updatedActor = actorRepository.save(actorForUpdate);
             return actorMapper.mapActorToActorDTO(updatedActor);
         }
-        throw new ActorNotFoundException("Actor with id " + id + " doesn't exist");
+        throw new ObjectNotFoundException(Actor.class.getSimpleName(), id);
     }
 
-    public void deleteActor(Long id) throws ActorNotFoundException {
+    public void deleteActor(Long id) {
         Optional<Actor> actor = actorRepository.findById(id);
         if (actor.isPresent()) {
 
             actorRepository.deleteById(id);
+        } else {
+            throw new ObjectNotFoundException(Actor.class.getSimpleName(), id);
         }
-        throw new ActorNotFoundException("Actor with given id: " + id + " doesn't exist in databse");
     }
 
 
@@ -68,13 +68,13 @@ public class ActorService {
         return actorDTOS;
     }
 
-    public ActorDTO findActorById(Long id) throws ActorNotFoundException {
+    public ActorDTO findActorById(Long id) {
         Optional<Actor> actor = actorRepository.findById(id);
         if (actor.isPresent()) {
 
             Actor foundActor = actor.get();
             return actorMapper.mapActorToActorDTO(foundActor);
         }
-        throw new ActorNotFoundException("Actor with given id: " + id + " doesnt exist");
+        throw new ObjectNotFoundException(Actor.class.getSimpleName(), id);
     }
 }

@@ -1,7 +1,6 @@
 package com.prodyna.movieapp.controller;
 
 import com.prodyna.movieapp.dto.ActorDTO;
-import com.prodyna.movieapp.exception.ActorNotFoundException;
 import com.prodyna.movieapp.service.ActorService;
 import java.util.List;
 import javax.validation.Valid;
@@ -42,19 +41,19 @@ public class ActorController {
     }
 
     @GetMapping(path = "/{id}")
-    public ActorDTO findActorById(@PathVariable Long id) throws ActorNotFoundException {
+    public ActorDTO findActorById(@PathVariable Long id) {
         ActorDTO actor = actorService.findActorById(id);
         return actor;
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<ActorDTO> updateActor(@PathVariable Long id, @RequestBody @Valid ActorDTO actor) throws ActorNotFoundException {
+    public ResponseEntity<ActorDTO> updateActor(@PathVariable Long id, @RequestBody @Valid ActorDTO actor) {
         ActorDTO updatedActor = actorService.updateActor(id, actor);
         return new ResponseEntity<>(updatedActor, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteActor(@PathVariable Long id) throws ActorNotFoundException {
+    public ResponseEntity<String> deleteActor(@PathVariable Long id) {
         actorService.deleteActor(id);
         return new ResponseEntity<>("Actor with id: " + id + " was successfully deleted", HttpStatus.OK);
     }

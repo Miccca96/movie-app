@@ -6,7 +6,6 @@ import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.dto.MovieDTO;
 import com.prodyna.movieapp.dto.MovieDTOPatch;
 import com.prodyna.movieapp.dto.ReviewDTO;
-import com.prodyna.movieapp.exception.MovieAlreadyExist;
 import com.prodyna.movieapp.exception.ObjectNotFoundException;
 import com.prodyna.movieapp.mapstruct.ActorMapper;
 import com.prodyna.movieapp.mapstruct.MovieMapper;
@@ -52,7 +51,7 @@ public class MovieService {
         Optional<Movie> foundMovie = movieRepository.findByNameAndReleaseDate(movie.getName(), movie.getReleaseDate());
         if (foundMovie.isPresent()) {
             Movie movieDB = foundMovie.get();
-            throw new MovieAlreadyExist("Movie " + movieDB.getName() + " released in " + movieDB.getReleaseDate() + " already exist in database");
+            throw new RuntimeException("Movie " + movieDB.getName() + " released in " + movieDB.getReleaseDate() + " already exist in database");
         }
         List<Actor> actors = new ArrayList<>();
         for (Actor a : movie.getActors()) {

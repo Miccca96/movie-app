@@ -1,9 +1,7 @@
 package com.prodyna.movieapp.service;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,13 +11,11 @@ import com.prodyna.movieapp.domain.Movie;
 import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.dto.MovieDTO;
 import com.prodyna.movieapp.dto.MovieDTOPatch;
-import com.prodyna.movieapp.exception.MovieAlreadyExist;
 import com.prodyna.movieapp.exception.ObjectNotFoundException;
 import com.prodyna.movieapp.mapstruct.ActorMapper;
 import com.prodyna.movieapp.mapstruct.MovieMapper;
 import com.prodyna.movieapp.repository.ActorRepository;
 import com.prodyna.movieapp.repository.MovieRepository;
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -194,17 +190,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
     public void shouldCreateMovie() {
 
         Mockito.when(movieMapper.mapMovieDTOToMovie(inceptionDTO)).thenReturn(inceptionForSaving);
-
         Mockito.when(movieRepository.findByNameAndReleaseDate(inceptionForSaving.getName(), inceptionForSaving.getReleaseDate())).thenReturn(Optional.empty());
-
         Assertions.assertDoesNotThrow(() -> movieRepository.findByNameAndReleaseDate(inceptionDTO.getName(), inceptionDTO.getReleaseDate()));
-
         Mockito.when(actorRepository.findById(-20L)).thenReturn(Optional.empty());
-
         Assertions.assertDoesNotThrow(() -> actorRepository.findById(-20L));
-
         Mockito.when(movieRepository.save(inceptionForSaving)).thenReturn(inception);
-
         Assertions.assertDoesNotThrow(() -> movieService.createMovie(inceptionDTO));
 
 
@@ -264,7 +254,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
     void shouldPatchMovie(){
 
         Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.of(inception));
-        boolean needUpdate = true;
+
         Mockito.when(movieRepository.save(inception)).thenReturn(inceptionPatch);
         Mockito.when(movieMapper.mapMovieToMovieDTO(inception)).thenReturn(inceptionPatchDTO);
         MovieDTO patchedMovie = movieService.partialUpdateMovie(1L,movieDTOPatch);
