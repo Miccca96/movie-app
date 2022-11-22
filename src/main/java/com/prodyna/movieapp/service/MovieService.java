@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 @Service
@@ -45,7 +45,6 @@ public class MovieService {
         this.reviewMapper = reviewMapper;
     }
 
-
     public void createMovie(MovieDTO movieDTO) {
         Movie movie = movieMapper.mapMovieDTOToMovie(movieDTO);
         Optional<Movie> foundMovie = movieRepository.findByNameAndReleaseDate(movie.getName(), movie.getReleaseDate());
@@ -60,8 +59,8 @@ public class MovieService {
                 Actor actorDB = actor.get();
                 actors.add(actorDB);
             } else {
-                Actor actor2 = actorRepository.save(a);
-                actors.add(actor2);
+                Actor newActor = actorRepository.save(a);
+                actors.add(newActor);
             }
         }
         movie.setActors(actors);
@@ -71,11 +70,11 @@ public class MovieService {
     public MovieDTO updateMovie(Long id, Movie movie) {
         Optional<Movie> m = movieRepository.findById(id);
         if (m.isPresent()) {
-            Movie movie1 = m.get();
-            movie1.setName(movie.getName());
-            movie1.setDesc(movie.getDesc());
-            movie1.setGenre(movie.getGenre());
-            Movie updatedMovie = movieRepository.save(movie1);
+            Movie movieDB = m.get();
+            movieDB.setName(movie.getName());
+            movieDB.setDesc(movie.getDesc());
+            movieDB.setGenre(movie.getGenre());
+            Movie updatedMovie = movieRepository.save(movieDB);
             return movieMapper.mapMovieToMovieDTO(updatedMovie);
         }
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
@@ -140,21 +139,21 @@ public class MovieService {
         Optional<Movie> movie = movieRepository.findById(id);
         if (movie.isPresent()) {
             Movie moviedb = movie.get();
-            if (StringUtils.hasLength(movieDTO.getDescription())) {
+            if (!StringUtils.isBlank(movieDTO.getDescription())) {
                 moviedb.setDesc(movieDTO.getDescription());
                 needUpdate = true;
             }
-            if (StringUtils.hasLength(movieDTO.getName())) {
+            if (!StringUtils.isBlank(movieDTO.getName())) {
                 moviedb.setName(movieDTO.getName());
                 needUpdate = true;
             }
 
-            if (!ObjectUtils.isEmpty(movieDTO.getReleaseDate()) && StringUtils.hasLength(movieDTO.getReleaseDate().toString())) {
+            if (!ObjectUtils.isEmpty(movieDTO.getReleaseDate())) {
                 moviedb.setReleaseDate(movieDTO.getReleaseDate());
                 needUpdate = true;
             }
 
-            if (!ObjectUtils.isEmpty(movieDTO.getDurationMins()) && StringUtils.hasLength(movieDTO.getDurationMins().toString())) {
+            if (!ObjectUtils.isEmpty(movieDTO.getDurationMins())) {
                 moviedb.setDurationMins(movieDTO.getDurationMins());
                 needUpdate = true;
             }
@@ -163,6 +162,7 @@ public class MovieService {
                 Movie patchedMovie = movieRepository.save(moviedb);
                 return movieMapper.mapMovieToMovieDTO(patchedMovie);
             }
+            return movieMapper.mapMovieToMovieDTO(moviedb);
         }
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }

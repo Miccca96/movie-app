@@ -24,7 +24,6 @@ public class MovieController {
 
     private final MovieService movieService;
 
-
     @Autowired
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
@@ -32,20 +31,20 @@ public class MovieController {
 
     @PostMapping
     public ResponseEntity<String> createMovie(@RequestBody MovieDTO movieDTO) {
-            movieService.createMovie(movieDTO);
-            return new ResponseEntity<>("Movie was successfully created", HttpStatus.OK);
+        movieService.createMovie(movieDTO);
+        return new ResponseEntity<>("Movie was successfully created", HttpStatus.OK);
     }
 
     @PatchMapping(path = "/{id}")
     public ResponseEntity<MovieDTO> partialUpdateMovie(@PathVariable Long id, @RequestBody MovieDTOPatch movieDTO) {
-        MovieDTO movie = movieService.partialUpdateMovie(id,movieDTO);
-        return new ResponseEntity<>(movie,HttpStatus.CREATED);
+        MovieDTO movie = movieService.partialUpdateMovie(id, movieDTO);
+        return new ResponseEntity<>(movie, HttpStatus.CREATED);
     }
 
-        @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> deleteMovieWithReviews(@PathVariable Long id){
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<String> deleteMovieWithReviews(@PathVariable Long id) {
         movieService.deleteMovieWithReviews(id);
-        return new ResponseEntity<>("Movie was successfully deleted",HttpStatus.OK);
+        return new ResponseEntity<>("Movie was successfully deleted", HttpStatus.OK);
     }
 
     @GetMapping
@@ -71,7 +70,5 @@ public class MovieController {
         MovieDTO movieDTO = movieService.getMovieById(id);
         return new ResponseEntity<>(movieDTO, HttpStatus.OK);
     }
-
-
 
 }

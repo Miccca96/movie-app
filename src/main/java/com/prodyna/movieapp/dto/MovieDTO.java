@@ -26,7 +26,7 @@ public class MovieDTO {
     private String name;
     private List<ActorDTO> actors;
     @NotNull
-    private  Integer releaseDate;
+    private Integer releaseDate;
     @NotNull
     private Integer durationMins;
     @Size(max = 1000)

@@ -35,7 +35,6 @@ public abstract class MovieMapper {
     @Mapping(source = "desc", target = "description")
     public abstract MovieDTO mapMovieToMovieDTO(Movie movie);
 
-
     @Mapping(target = "id", ignore = true)
     public abstract Movie mapMovieDTOToMovie(MovieDTO movieDTO);
 
