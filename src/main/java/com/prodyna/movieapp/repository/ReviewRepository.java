@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReviewRepository extends Neo4jRepository<Review, Long> {
 
 
-    @Query("match (m:Movie),(r:Review)\n" +
+    @Query("match (m:Movie)-[rel]->(r:Review)\n" +
             "where id(m) = $id\n" +
             "return collect(r)")
     List<Review> getReviewsForMovie(Long id);

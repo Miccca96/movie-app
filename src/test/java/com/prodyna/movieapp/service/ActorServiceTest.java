@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.dto.ActorDTO;
-import com.prodyna.movieapp.exception.ActorNotFoundException;
+import com.prodyna.movieapp.exception.ObjectNotFoundException;
 import com.prodyna.movieapp.mapstruct.ActorMapper;
 import com.prodyna.movieapp.repository.ActorRepository;
 import java.util.Comparator;
@@ -131,7 +131,7 @@ class ActorServiceTest {
     }
 
     @Test
-    void shouldUpdateActor() throws ActorNotFoundException {
+    void shouldUpdateActor()  {
 
         given(actorRepository.findById(1L)).willReturn(Optional.of(savedActor));
 
@@ -146,13 +146,11 @@ class ActorServiceTest {
     }
 
     @Test
-    void shouldDeleteActor() throws ActorNotFoundException {
+    void shouldDeleteActor() {
 
         given(actorRepository.findById(1L)).willReturn(Optional.of(savedActor));
         willDoNothing().given(actorRepository).deleteById(1L);
-
         Assertions.assertDoesNotThrow(() -> actorService.deleteActor(1L));
-        actorService.deleteActor(1L);
         verify(actorRepository, times(1)).deleteById(1L);
     }
 
@@ -161,13 +159,13 @@ class ActorServiceTest {
 
         when(actorRepository.findById(-100L)).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(ActorNotFoundException.class, () -> {
+        Assertions.assertThrows(ObjectNotFoundException.class, () -> {
             actorService.findActorById(-100L);
         });
     }
 
     @Test
-    public void shouldFindActorById() throws ActorNotFoundException {
+    public void shouldFindActorById() {
 
         when(actorRepository.findById(1L)).thenReturn(Optional.of(savedActor));
         when(actorMapper.mapActorToActorDTO(savedActor)).thenReturn(savedActorDTO);

@@ -37,18 +37,19 @@ public class ActorRepositoryTest {
         actorRepository.deleteAll();
         movieRepository.deleteAll();
     }
-    private Movie createTestMovie(){
+
+    private Movie createTestMovie() {
         List<Actor> actors = new ArrayList<>();
         List<Review> reviews = new ArrayList<>();
         //given
-        Actor actor = new Actor("Julia","Roberts","bio");
-        Actor actor1 = new Actor("Adam","Smith","bio");
+        Actor actor = new Actor("Julia", "Roberts", "bio");
+        Actor actor1 = new Actor("Adam", "Smith", "bio");
         actors.add(actor1);
         actors.add(actor);
 
-        Review review = new Review(3,"Bad","Very bad");
+        Review review = new Review(3, "Bad", "Very bad");
         reviews.add(review);
-        Movie movie = new Movie("Kiss", "This is teenage movie", Genre.DRAMA, LocalDate.of(2023, 10, 23), Double.valueOf(56.3), actors,reviews);
+        Movie movie = new Movie("Kiss", "This is teenage movie", Genre.DRAMA, 2020, 56, actors, reviews);
         return movie;
     }
 
@@ -59,7 +60,7 @@ public class ActorRepositoryTest {
         Movie movie = createTestMovie();
         Movie createdMovie = movieRepository.save(movie);
         //when
-        List<Actor> resultActors= actorRepository.findAllActors(createdMovie.getId());
+        List<Actor> resultActors = actorRepository.findAllActors(createdMovie.getId());
 
         //then
         assertThat(resultActors).isEqualTo(movie.getActors());
