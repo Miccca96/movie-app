@@ -16,20 +16,14 @@ public abstract class MovieMapper {
     @AfterMapping
     public void calculateAvgRatingOfReviewsInMovie(Movie movie, @MappingTarget MovieDTO.MovieDTOBuilder movieDTO) {
         double sum = 0;
-        int count = 0;
 
-        if (movie.getReviews() == null) {
+        if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
             movieDTO.averageRating(Double.valueOf(0));
         }
         for (Review r : movie.getReviews()) {
             sum += r.getRating();
-            count++;
         }
-        if (count == 0)
-            movieDTO.averageRating(Double.valueOf(0));
-        else {
-            movieDTO.averageRating(Double.valueOf((double) sum / count));
-        }
+        movieDTO.averageRating(Double.valueOf((double) sum / movie.getReviews().size()));
     }
 
     @Mapping(source = "desc", target = "description")
