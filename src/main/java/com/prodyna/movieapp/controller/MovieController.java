@@ -5,7 +5,9 @@ import com.prodyna.movieapp.dto.MovieDTO;
 import com.prodyna.movieapp.dto.MovieDTOPatch;
 import com.prodyna.movieapp.dto.ReviewDTO;
 import com.prodyna.movieapp.service.MovieService;
+import com.prodyna.movieapp.service.ReviewService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovieController {
 
     private final MovieService movieService;
+    private final ReviewService reviewService;
 
     @Autowired
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService,ReviewService reviewService) {
         this.movieService = movieService;
+        this.reviewService = reviewService;
     }
 
     @PostMapping
-    public ResponseEntity<String> createMovie(@RequestBody MovieDTO movieDTO) {
+    public ResponseEntity<String> createMovie(@RequestBody @Valid MovieDTO movieDTO) {
         movieService.createMovie(movieDTO);
         return new ResponseEntity<>("Movie was successfully created", HttpStatus.OK);
     }
@@ -70,5 +74,20 @@ public class MovieController {
         MovieDTO movieDTO = movieService.getMovieById(id);
         return new ResponseEntity<>(movieDTO, HttpStatus.OK);
     }
+
+    @PostMapping("/{id}/reviews")
+    public ResponseEntity<String> createReview(@PathVariable Long id,@RequestBody @Valid ReviewDTO reviewDTO){
+        reviewService.createReview(id, reviewDTO);
+        return new ResponseEntity<>("Review was successfully created", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{movieId}/reviews/{reviewId}")
+    public ResponseEntity<String> deleteReview(@PathVariable Long movieId, @PathVariable Long reviewId){
+        reviewService.deleteReview(movieId, reviewId);
+        return new ResponseEntity<>("Review with id "+ reviewId+ " was successfully deleted",HttpStatus.OK);
+
+    }
+
+
 
 }

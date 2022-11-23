@@ -1,5 +1,7 @@
 package com.prodyna.movieapp.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +18,8 @@ import org.springframework.data.neo4j.core.schema.Node;
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 public class Review {
 
     @Id

@@ -21,10 +21,12 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
+@Transactional
 @Service
 public class MovieService {
 

@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
 @Slf4j
+@Transactional
 public class ActorService {
-
     private final ActorRepository actorRepository;
     private final ActorMapper actorMapper;
-
     @Autowired
     public ActorService(ActorRepository actorRepository, ActorMapper actorMapper) {
         this.actorRepository = actorRepository;
