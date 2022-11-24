@@ -1,5 +1,6 @@
 package com.prodyna.movieapp.controller;
 
+import com.prodyna.movieapp.domain.Movie;
 import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.dto.MovieDTO;
 import com.prodyna.movieapp.dto.MovieDTOPatch;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +31,7 @@ public class MovieController {
     private final ReviewService reviewService;
 
     @Autowired
-    public MovieController(MovieService movieService,ReviewService reviewService) {
+    public MovieController(MovieService movieService, ReviewService reviewService) {
         this.movieService = movieService;
         this.reviewService = reviewService;
     }
@@ -76,18 +79,25 @@ public class MovieController {
     }
 
     @PostMapping("/{id}/reviews")
-    public ResponseEntity<String> createReview(@PathVariable Long id,@RequestBody @Valid ReviewDTO reviewDTO){
+    public ResponseEntity<String> createReview(@PathVariable Long id, @RequestBody @Valid ReviewDTO reviewDTO) {
         reviewService.createReview(id, reviewDTO);
         return new ResponseEntity<>("Review was successfully created", HttpStatus.OK);
     }
 
     @DeleteMapping("/{movieId}/reviews/{reviewId}")
-    public ResponseEntity<String> deleteReview(@PathVariable Long movieId, @PathVariable Long reviewId){
+    public ResponseEntity<String> deleteReview(@PathVariable Long movieId, @PathVariable Long reviewId) {
         reviewService.deleteReview(movieId, reviewId);
-        return new ResponseEntity<>("Review with id "+ reviewId+ " was successfully deleted",HttpStatus.OK);
+        return new ResponseEntity<>("Review with id " + reviewId + " was successfully deleted", HttpStatus.OK);
 
     }
 
-
-
+    @GetMapping(path = {"/search"})
+    public List<MovieDTO> home(@RequestParam ("name") String keyword) {
+        if (keyword != null && !keyword.isEmpty()) {
+            List<MovieDTO> listAllMovies = movieService.getByKeyword(keyword);
+            return listAllMovies;
+        }
+        List<MovieDTO> list = movieService.getMoviesByRatings();
+        return list;
+    }
 }

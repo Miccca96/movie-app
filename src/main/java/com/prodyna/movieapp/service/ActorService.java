@@ -61,7 +61,6 @@ public class ActorService {
         }
     }
 
-
     public List<ActorDTO> getActorsSortByName() {
         List<Actor> actors = actorRepository.findAllActorsSortByName();
         List<ActorDTO> actorDTOS = actors.stream().map(a -> actorMapper.mapActorToActorDTO(a)).collect(Collectors.toList());
