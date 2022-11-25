@@ -9,6 +9,7 @@ import com.prodyna.movieapp.service.MovieService;
 import com.prodyna.movieapp.service.ReviewService;
 import java.util.List;
 import javax.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "api/movies")
 public class MovieController {
@@ -30,11 +33,6 @@ public class MovieController {
     private final MovieService movieService;
     private final ReviewService reviewService;
 
-    @Autowired
-    public MovieController(MovieService movieService, ReviewService reviewService) {
-        this.movieService = movieService;
-        this.reviewService = reviewService;
-    }
 
     @PostMapping
     public ResponseEntity<String> createMovie(@RequestBody @Valid MovieDTO movieDTO) {
@@ -92,7 +90,7 @@ public class MovieController {
     }
 
     @GetMapping(path = {"/search"})
-    public List<MovieDTO> home(@RequestParam ("name") String keyword) {
+    public List<MovieDTO> home(@RequestParam("name") String keyword) {
         if (keyword != null && !keyword.isEmpty()) {
             List<MovieDTO> listAllMovies = movieService.getByKeyword(keyword);
             return listAllMovies;

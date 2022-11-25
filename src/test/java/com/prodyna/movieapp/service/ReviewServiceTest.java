@@ -1,13 +1,11 @@
 package com.prodyna.movieapp.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.willDoNothing;
 
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Genre;
 import com.prodyna.movieapp.domain.Movie;
 import com.prodyna.movieapp.domain.Review;
-import com.prodyna.movieapp.dto.ActorDTO;
 import com.prodyna.movieapp.dto.ReviewDTO;
 import com.prodyna.movieapp.exception.ObjectNotFoundException;
 import com.prodyna.movieapp.mapstruct.ReviewMapper;
@@ -25,6 +23,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+;
+
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
@@ -34,7 +34,6 @@ class ReviewServiceTest {
     ReviewRepository reviewRepository;
     @Mock
     ReviewMapper reviewMapper;
-
     @InjectMocks
     ReviewService reviewService;
     Movie inception;
@@ -131,7 +130,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    public void shouldThrowExcWhenMovieIdDoesntExistCreate() {
+    public void shouldThrowExcWhenMovieIdDoesntExistWhenTryingToPostReview() {
 
         Mockito.when(movieRepository.findById(-100L)).thenReturn(Optional.empty());
         Assertions.assertThrows(ObjectNotFoundException.class, () -> reviewService.createReview(-100L, newReviewDTO));
@@ -139,13 +138,13 @@ class ReviewServiceTest {
     }
 
     @Test
-    public void shouldThrowExWhenMovieIdDoesntExistDelete() {
+    public void shouldThrowExWhenMovieIdDoesntExistWhenTryingToDeleteReview() {
         Mockito.when(movieRepository.findById(-100L)).thenReturn(Optional.empty());
         Assertions.assertThrows(ObjectNotFoundException.class, () -> reviewService.deleteReview(-100L, 2L));
     }
 
     @Test
-    public void shouldThrowExWhenReviewIdDoesntExistDelete() {
+    public void shouldThrowExWhenReviewIdDoesntExistWhenTryingToDeleteReview() {
         Mockito.when(movieRepository.findById(1L)).thenReturn(Optional.of(inception));
         Assertions.assertThrows(ObjectNotFoundException.class, () -> reviewService.deleteReview(1L, -5L));
     }

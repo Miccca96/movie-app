@@ -8,6 +8,7 @@ import com.prodyna.movieapp.repository.ActorRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,16 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-@Transactional
+@AllArgsConstructor
 public class ActorService {
     private final ActorRepository actorRepository;
     private final ActorMapper actorMapper;
-    @Autowired
-    public ActorService(ActorRepository actorRepository, ActorMapper actorMapper) {
-        this.actorRepository = actorRepository;
-        this.actorMapper = actorMapper;
-    }
 
+    @Transactional
     public void createActor(ActorDTO actor) {
         Optional<Actor> actorDB = actorRepository.findByFirstNameAndLastName(actor.getFirstName(), actor.getLastName());
         if (actorDB.isPresent()) {
@@ -36,6 +33,7 @@ public class ActorService {
         Actor savedActor = actorRepository.save(createdActor);
     }
 
+    @Transactional
     public ActorDTO updateActor(Long id, ActorDTO actor) {
         Optional<Actor> actorDB = actorRepository.findById(id);
         if (actorDB.isPresent()) {
