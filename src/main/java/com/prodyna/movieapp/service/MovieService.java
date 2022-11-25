@@ -127,6 +127,7 @@ public class MovieService {
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 
+    @Transactional
     public void deleteMovieWithReviews(Long id) {
 
         Optional<Movie> movie = movieRepository.findById(id);
@@ -172,9 +173,4 @@ public class MovieService {
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 
-    public List<MovieDTO> getByKeyword(String keyword){
-        List<Movie> movies = movieRepository.findByKeyword(keyword);
-        List<MovieDTO> movieDTOS = movies.stream().map(m->movieMapper.mapMovieToMovieDTO(m)).collect(Collectors.toList());
-        return movieDTOS;
-    }
 }

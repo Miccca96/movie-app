@@ -19,9 +19,4 @@ public interface MovieRepository extends Neo4jRepository<Movie,Long> {
             "detach delete m,rel,r")
     void deleteMovieAndReviews(Long id);
 
-
-    @Query("match (m:Movie)-[has:HAS]->(r:Review),(m:Movie)<-[act:`ACTS IN`]-(a:Actor)\n" +
-            "where toLower(m.name) contains toLower(\"the\")\n" +
-            "return m,collect(has),collect(act),collect(r),collect(a)")
-    List<Movie> findByKeyword(@Param("keyword") String keyword);
 }

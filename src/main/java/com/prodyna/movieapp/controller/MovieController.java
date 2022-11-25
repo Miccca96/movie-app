@@ -88,14 +88,4 @@ public class MovieController {
         return new ResponseEntity<>("Review with id " + reviewId + " was successfully deleted", HttpStatus.OK);
 
     }
-
-    @GetMapping(path = {"/search"})
-    public List<MovieDTO> home(@RequestParam("name") String keyword) {
-        if (keyword != null && !keyword.isEmpty()) {
-            List<MovieDTO> listAllMovies = movieService.getByKeyword(keyword);
-            return listAllMovies;
-        }
-        List<MovieDTO> list = movieService.getMoviesByRatings();
-        return list;
-    }
 }

@@ -49,6 +49,7 @@ public class ActorService {
         throw new ObjectNotFoundException(Actor.class.getSimpleName(), id);
     }
 
+    @Transactional
     public void deleteActor(Long id) {
         Optional<Actor> actor = actorRepository.findById(id);
         if (actor.isPresent()) {
