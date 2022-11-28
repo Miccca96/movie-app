@@ -21,10 +21,12 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
+@Transactional
 @Service
 public class MovieService {
 
@@ -45,6 +47,7 @@ public class MovieService {
         this.reviewMapper = reviewMapper;
     }
 
+    @Transactional
     public void createMovie(MovieDTO movieDTO) {
         Movie movie = movieMapper.mapMovieDTOToMovie(movieDTO);
         Optional<Movie> foundMovie = movieRepository.findByNameAndReleaseDate(movie.getName(), movie.getReleaseDate());
@@ -67,6 +70,7 @@ public class MovieService {
         movieRepository.save(movie);
     }
 
+    @Transactional
     public MovieDTO updateMovie(Long id, Movie movie) {
         Optional<Movie> m = movieRepository.findById(id);
         if (m.isPresent()) {
@@ -123,6 +127,7 @@ public class MovieService {
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
 
+    @Transactional
     public void deleteMovieWithReviews(Long id) {
 
         Optional<Movie> movie = movieRepository.findById(id);
@@ -133,6 +138,7 @@ public class MovieService {
         }
     }
 
+    @Transactional
     public MovieDTO partialUpdateMovie(Long id, MovieDTOPatch movieDTO) {
 
         boolean needUpdate = false;
@@ -166,4 +172,5 @@ public class MovieService {
         }
         throw new ObjectNotFoundException(Movie.class.getSimpleName(), id);
     }
+
 }
