@@ -17,7 +17,7 @@ public interface ReviewRepository extends Neo4jRepository<Review, Long> {
     List<Review> getReviewsForMovie(Long id);
 
     @Query("MATCH (m:Movie)-[rel]->(r:Review)\n" +
-            "WHERE id(m) = $movieId and id(r) = $reviewId\n" +
+            "WHERE id(m) = $movieId AND id(r) = $reviewId\n" +
             "delete rel,r")
     void delete(Long movieId,Long reviewId);
 }
