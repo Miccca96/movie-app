@@ -20,7 +20,10 @@ public abstract class MovieMapper {
         if (movie.getReviews() == null || movie.getReviews().isEmpty()) {
             movieDTO.averageRating(Double.valueOf(0));
         }
-        sum = movie.getReviews().stream().mapToInt((el) -> el.getRating()).summaryStatistics().getSum();
+        sum = movie.getReviews().stream()
+                .mapToInt((el) -> el.getRating())
+                .summaryStatistics().getSum();
+
         movieDTO.averageRating(Double.valueOf((double) sum / movie.getReviews().size()));
     }
 

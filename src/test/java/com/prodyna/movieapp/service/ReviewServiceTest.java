@@ -23,8 +23,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-;
-
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
@@ -105,7 +103,6 @@ class ReviewServiceTest {
                 .averageRating(3.5)
                 .reviews(reviews)
                 .build();
-
     }
 
     @BeforeEach
