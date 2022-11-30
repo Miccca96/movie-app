@@ -1,10 +1,41 @@
-version: "3.7"
+version: "3.9"
+name: movie-app
 
 services:
+  movie-app:
+    image: milicavasovic/movie-app:latest
+    container_name: app
+    environment:
+      SPRING_NEO4J_URI: bolt://neo4j-db:7687
+      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
+      SPRING_NEO4J_AUTHENTICATION_PASSWORD: secret
+    ports:
+      - 8080:8080
+    depends_on:
+      neo4j-db:
+        condition: service_healthy
+    links:
+      - neo4j-db
+
   neo4j-db:
     image: neo4j:5.1.0-community
+    container_name: neo4j
     ports:
-      - 7474:7474 # HTTP
       - 7687:7687 # Bolt
+      - 7474:7474 # HTTP
     environment:
       NEO4J_AUTH: neo4j/secret
+      dbms_connector_bolt_listen__address: neo4j-db:7687
+      dbms_connector_bolt_advertised__address: neo4j-db:7687
+    volumes:
+      - ~/Data/neo4j/data:/var/lib/neo4j/data
+      - ~/Data/neo4j/import:/var/lib/neo4j/import
+      - ~/Data/neo4j/conf:/var/lib/neo4j/conf
+      - ~/Data/neo4j/logs:/var/lib/neo4j/logs
+      - ~/Data/neo4j/plugins:/var/lib/neo4j/plugins
+      - ~/Data/neo4j/rdf:/var/lib/neo4j/rdf
+    healthcheck:
+      test: cypher-shell --username neo4j --password secret 'MATCH (n) RETURN COUNT(n);'
+      interval: 10s
+      timeout: 10s
+      retries: 5

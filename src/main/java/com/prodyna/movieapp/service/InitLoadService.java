@@ -1,5 +1,7 @@
 package com.prodyna.movieapp.service;
 
+import ch.qos.logback.core.pattern.ConverterUtil;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prodyna.movieapp.domain.Actor;
 import com.prodyna.movieapp.domain.Movie;
@@ -16,8 +18,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.core.io.Resource;
 
 @Service
 @Slf4j
@@ -32,13 +36,16 @@ public class InitLoadService {
 
     private static final String path = "src/main/resources/";
 
+    private final Resource resourceFile;
+
     @Autowired
-    public InitLoadService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper, ValidationService validationService) {
+    public InitLoadService(ActorRepository actorRepository, MovieRepository movieRepository, ReviewRepository reviewRepository, Mapper mapper, ValidationService validationService,@Value("classpath:movies.json") Resource resourceFile) {
         this.actorRepository = actorRepository;
         this.movieRepository = movieRepository;
         this.reviewRepository = reviewRepository;
         this.mapper = mapper;
         this.validationService = validationService;
+        this.resourceFile = resourceFile;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -46,7 +53,7 @@ public class InitLoadService {
         log.info("Application started and method was invoked");
         JsonMoviesDTO data = new JsonMoviesDTO();
 
-        data = convertJsonToObjects("movies.json", JsonMoviesDTO.class);
+        data = convertJsonToObjects(resourceFile, JsonMoviesDTO.class);
 
         processData(data);
 
@@ -100,17 +107,14 @@ public class InitLoadService {
         movieRepository.save(m);
     }
 
-    private <T> T convertJsonToObjects(String fileName, Class<T> classType) {
-        T t = null;
-        File file = new File(path + fileName);
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            t = mapper.readValue(file, classType);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public <T> T convertJsonToObjects(Resource resourceFile, Class<T> classType) throws IOException {
+        T target = null;
 
-        return t;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        target = mapper.readValue(resourceFile.getInputStream(), classType);
+
+        return target;
     }
 }
