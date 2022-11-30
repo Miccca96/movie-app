@@ -8,6 +8,7 @@ class MovieAppApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
